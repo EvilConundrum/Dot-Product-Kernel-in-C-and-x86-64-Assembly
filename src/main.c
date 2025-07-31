@@ -39,21 +39,14 @@ int main (){
 	printf("Starting dot product calculation...\n");
 	clock_t start_time = clock();
 	
-	// Run multiple iterations for measurable timing
-	double result_c = 0.0;
-	int iterations = 1000000; // 1 million iterations
-	
-	for (int i = 0; i < iterations; i++) {
-		result_c = dot_product_c(vec1, vec2, n);
-	}
+	// Perform single dot product calculation
+	double result_c = dot_product_c(vec1, vec2, n);
 	
 	double execution_time = get_time_elapsed(start_time);
 	
-	printf("C Result:    %f\n", result_c);
-	printf("Iterations performed: %d\n", iterations);
-	printf("Total time taken (C implementation): %lf seconds\n", execution_time);
-	printf("Average time per calculation: %lf seconds\n", execution_time / iterations);
-	printf("Average time per calculation: %.3f microseconds\n", (execution_time / iterations) * 1000000);
+	printf("C Result: %f\n", result_c);
+	printf("Time taken (C implementation): %lf seconds\n", execution_time);
+	printf("Time taken: %.6f microseconds\n", execution_time * 1000000);
 	
 	// Free allocated memory
 	free(vec1);
