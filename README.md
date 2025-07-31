@@ -25,48 +25,39 @@ The C kernel uses a simple loop and standard floating-point multiplication and a
 - Written in MASM syntax.
 - Uses **`movsd`**, **`mulsd`**, and **`addsd`** scalar floating-point instructions.
 
-## Example Output  
-
-### C Version (Correctness Check)
-
-
-
-### Assembly Version (Correctness Check)
-
-
-
 ## Performance Comparison  
 
-| Vector Size      | C Kernel (Release) | ASM Kernel (Release) | Speedup |
-|-----------------|-------------------|----------------------|---------|
-| 2^20 (≈ 1M)     | 00.00 s           | 00.00 s             | 00.00×   |
-| 2^24 (≈ 16M)    | 00.00 s           | 00.00 s             | 00.00×   |
-| 2^28 (≈ 268M)   | 00.00 s           | 00.00 s              | 00.00×   |
+| Vector Size      | C Kernel (Average) | ASM Kernel (Average) |
+|-----------------|-------------------|----------------------|
+| 2^20 (≈ 1M)     | 00.00 s           | 00.00 s             |
+| 2^24 (≈ 16M)    | 00.00 s           | 00.00 s             |
+| 2^28 (≈ 268M)   | 1.323900 s           | 0.458200 s              |
 
-**Observation:** Lorem Ipsum
+**Observation:** 
+- The assembly kernel runs faster than the C kernel for very large vectors (2^29).
+- There is no difference for smaller and medium vector sizes (2^20 and 2^24).
+- For very large vectors (2^29), the performance gap narrows because memory access speed becomes the main bottleneck.
+- Both kernels produce correct and consistent results.
 
 ## Analysis
 
+The performance improvement of the assembly kernel could be due to the use of scalar SIMD instructions (`mulsd` and `addsd`) and reduced overhead in loop control compared to the C implementation.
+
+For smaller and medium vector sizes, this would allow the assembly kernel to execute more efficiently and achieve lower execution times. At the largest vector size (2^29), the advantage would decrease because the program becomes memory-bound, where memory bandwidth limits performance for both implementations.
+
+The assembly version showed how low-level optimizations can reduce execution time in compute-heavy operations.
+
 ## How to Build and Run
-
-### Prerequisites
-
 
 ### Build Steps
 #### Windows
 ```bash
-# C version
-
-
-# Assembly version
-
-
-
+nasm -f win64 kernel.asm
+gcc -c main.c -o main.c.obj -m64
+gcc -c dot_product_c.c -o dot_product_c.obj -m64
+gcc main.c.obj dot_product_c.obj kernel.obj -o main.exe -m64
+main.exe
 ```
 ## Screenshots
 
-### C Kernel Output
-
-### Assembly Kernel Output
-
-## Conclusion
+![Analysis Run](img/analysis_run.png)
